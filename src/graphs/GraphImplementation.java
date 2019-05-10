@@ -33,6 +33,16 @@ class Graph {
 		return false;
 	}
 
+	boolean CompareEdges(Graph.Edge parent, Graph.Edge child) {
+		if (parent.weight > child.weight) {
+			return true;
+		} else if (parent.weight < child.weight) {
+			return false;
+		}
+
+		return false;
+	}
+
 	void addEdge(int startingVertex, int endingVertex, int weight) {
 		G[startingVertex].add(0, new Edge(endingVertex, weight));
 	}
@@ -49,10 +59,20 @@ class Graph {
 public class GraphImplementation {
 	public static void main(String[] args) {
 		Graph g = new Graph(10);
+
 		g.addEdge(0, 2, 10);
 		g.addEdge(0, 5, 15);
 		g.addEdge(2, 5, 10);
 		g.addEdge(9, 3, 16);
+
+		System.out.println("The Min Heap is ");
+		MinHeap minHeap = new MinHeap(15);
+		minHeap.insert(g);
+		minHeap.insert(g);
+		minHeap.insert(g);
+		minHeap.minHeap();
+
+		minHeap.print();
 
 		System.out.println(g);
 		System.out.println(g.isConnected(0, 3));
