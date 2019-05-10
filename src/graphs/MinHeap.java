@@ -2,17 +2,20 @@ package graphs;
 
 public class MinHeap {
 
-	Graph g;
-	private Graph[] Heap;
+	class Node {
+		int startvertex;
+		int endvertex;
+		int weight;
+	}
+
+	private Node[] Heap;
 	private int size;
 	private int maxsize;
-
-	private static final int FRONT = 1;
 
 	public MinHeap(int maxsize) {
 		this.maxsize = maxsize;
 		this.size = 0;
-		Heap = new Graph[this.maxsize + 1];
+		Heap = new Node[this.maxsize + 1];
 
 	}
 
@@ -47,7 +50,7 @@ public class MinHeap {
 
 	// Function to swap two nodes of the heap
 	private void swap(int fpos, int spos) {
-		Graph tmp;
+		Node tmp;
 		tmp = Heap[fpos];
 		Heap[fpos] = Heap[spos];
 		Heap[spos] = tmp;
@@ -59,11 +62,11 @@ public class MinHeap {
 		// If the node is a non-leaf node and greater
 		// than any of its child
 		if (!isLeaf(pos)) {
-			if (g.CompareEdges(Heap[pos], Heap[leftChild(pos)]) || Heap[pos] > Heap[rightChild(pos)]) {
+			if (Heap[pos].weight > Heap[leftChild(pos)].weight || Heap[pos].weight > Heap[rightChild(pos)].weight) {
 
 				// Swap with the left child and heapify
 				// the left child
-				if (Heap[leftChild(pos)] < Heap[rightChild(pos)]) {
+				if (Heap[leftChild(pos)].weight < Heap[rightChild(pos)].weight) {
 					swap(pos, leftChild(pos));
 					minHeapify(leftChild(pos));
 				}
@@ -79,14 +82,14 @@ public class MinHeap {
 	}
 
 	// Function to insert a node into the heap
-	public void insert(Graph g) {
+	public void insert(Node n) {
 		if (size >= maxsize) {
 			return;
 		}
-		Heap[++size] = g;
+		Heap[++size] = n;
 		int current = size;
 
-		while (Heap[current] < Heap[parent(current)]) {
+		while (Heap[current].weight < Heap[parent(current)].weight) {
 			swap(current, parent(current));
 			current = parent(current);
 		}
