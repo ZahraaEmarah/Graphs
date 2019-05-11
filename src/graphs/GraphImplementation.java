@@ -3,18 +3,21 @@ package graphs;
 import java.util.LinkedList;
 import java.util.List;
 
-class Graph {
-	class Edge {
-		int vertex, weight;
+import graphs.Graph.Edge;
 
-		public Edge(int v, int w) {
-			this.vertex = v;
+class Graph {
+	public class Edge {
+		int Startvertex, Endvertex, weight;
+
+		public Edge(int v1, int v2, int w) {
+			this.Startvertex = v1;
+			this.Endvertex = v2;
 			this.weight = w;
 		}
 
 		@Override
 		public String toString() {
-			return "(" + vertex + "," + weight + ")";
+			return "(" + Startvertex + "," + weight + "," + Endvertex + ")";
 		}
 	}
 
@@ -28,13 +31,13 @@ class Graph {
 
 	boolean isConnected(int startingVertex, int endingVertex) {
 		for (Edge i : G[startingVertex])
-			if (i.vertex == endingVertex)
+			if (i.Endvertex == endingVertex)
 				return true;
 		return false;
 	}
 
 	void addEdge(int startingVertex, int endingVertex, int weight) {
-		G[startingVertex].add(0, new Edge(endingVertex, weight));
+		G[startingVertex].add(0, new Edge(startingVertex, endingVertex, weight));
 	}
 
 	@Override
@@ -56,15 +59,15 @@ public class GraphImplementation {
 		g.addEdge(9, 3, 16);
 
 		System.out.println("The Min Heap is ");
-		MinHeap minHeap = new MinHeap(15);
-		minHeap.insert(5);
-		minHeap.insert(10);
-		minHeap.insert(60);
+		MinHeap minHeap = new MinHeap(10);
+		for (Edge i : g.G[0]) {
+			minHeap.insert(i);
+		}
 		minHeap.minHeap();
-
 		minHeap.print();
+		System.out.println("The Min val is " + minHeap.GetRoot());
 
 		System.out.println(g);
-		System.out.println(g.isConnected(0, 3));
+		System.out.println(g.isConnected(0, 2));
 	}
 }

@@ -1,22 +1,19 @@
 package graphs;
 
+import graphs.Graph.Edge;
+
 public class MinHeap {
 
-	class Node {
-		int startvertex;
-		int endvertex;
-		int weight;
-	}
-
-	private Node[] Heap;
+	private Edge[] Heap;
 	private int size;
 	private int maxsize;
+
+	private static final int ROOT = 0;
 
 	public MinHeap(int maxsize) {
 		this.maxsize = maxsize;
 		this.size = 0;
-		Heap = new Node[this.maxsize + 1];
-
+		Heap = new Edge[this.maxsize + 1];
 	}
 
 	// Function to return the position of
@@ -50,7 +47,7 @@ public class MinHeap {
 
 	// Function to swap two nodes of the heap
 	private void swap(int fpos, int spos) {
-		Node tmp;
+		Edge tmp;
 		tmp = Heap[fpos];
 		Heap[fpos] = Heap[spos];
 		Heap[spos] = tmp;
@@ -82,23 +79,26 @@ public class MinHeap {
 	}
 
 	// Function to insert a node into the heap
-	public void insert(Node n) {
-		if (size >= maxsize) {
+	public void insert(Edge element) {
+		if (size > maxsize) {
 			return;
 		}
-		Heap[++size] = n;
+
+		Heap[size] = element;
 		int current = size;
+		size++;
 
 		while (Heap[current].weight < Heap[parent(current)].weight) {
 			swap(current, parent(current));
 			current = parent(current);
 		}
+
 	}
 
 	// Function to print the contents of the heap
 	public void print() {
-		for (int i = 1; i <= size; i++) {
-			System.out.print(" HEAP IS : " + Heap[i]);
+		for (int i = 0; i <= size; i++) {
+			System.out.print(" Heap is : " + Heap[i]);
 			System.out.println();
 		}
 	}
@@ -111,4 +111,12 @@ public class MinHeap {
 		}
 	}
 
+	// Function to remove and return the minimum
+	// element from the heap
+	public Edge GetRoot() {
+		Edge popped = Heap[ROOT];
+		Heap[ROOT] = Heap[size--];
+		minHeapify(ROOT);
+		return popped;
+	}
 }
