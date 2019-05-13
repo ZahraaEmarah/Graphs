@@ -1,4 +1,4 @@
-package graphs;
+package prim;
 
 public class MinHeap {
 

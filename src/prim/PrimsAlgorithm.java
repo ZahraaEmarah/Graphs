@@ -1,7 +1,7 @@
-package graphs;
+package prim;
 
-import graphs.Graph.Edge;
-import graphs.MinHeap.HeapNode;
+import prim.Graph.Edge;
+import prim.MinHeap.HeapNode;
 
 public class PrimsAlgorithm {
 
