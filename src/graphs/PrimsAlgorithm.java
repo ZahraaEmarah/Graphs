@@ -8,9 +8,11 @@ public class PrimsAlgorithm {
 	public void Prims(int verticesNo, Graph g) {
 
 		HeapNode[] heapnode = new HeapNode[verticesNo];
-		int MST[] = new int[verticesNo];
 		HeapNode Adjacent[] = new HeapNode[verticesNo];
+		HeapNode tmp;
+		int MST[] = new int[verticesNo];
 		int index = 0;
+		int cost = 0;
 
 		for (int i = 0; i < verticesNo; i++) {
 			heapnode[i] = new HeapNode();
@@ -23,68 +25,54 @@ public class PrimsAlgorithm {
 		}
 
 		int minKey;
-		boolean visited = false;
-		minKey = heapnode[0].key = 0;
-		HeapNode tmp = heapnode[0];
-		// heapnode[3].key = -1;
-
+		int vertex_in_spotlight;
+		heapnode[0].key = 0;
 		MinHeap minHeap = new MinHeap(verticesNo);
-		// add all the vertices to priority queue
+
 		for (int i = 0; i < verticesNo; i++) {
 			minHeap.insert(heapnode[i]);
 		}
-		minHeap.minHeapify();
-		minHeap.print();
+		minHeap.buildminHeap();
 
-		for (int i = 0; i < minHeap.Heap.length; i++) {
-			if (minHeap.Heap[i].key < minKey) {
+		while (!minHeap.isEmpty()) {
 
-				minKey = minHeap.Heap[i].key;
-				tmp = minHeap.Heap[i];
+			tmp = minHeap.removeRoot();
+			if (tmp == null)
+				break;
+
+			cost = cost + tmp.key;
+			minKey = tmp.key;
+			vertex_in_spotlight = tmp.vertex;
+			minHeap.buildminHeap();
+			MST[index++] = vertex_in_spotlight;
+
+			int c = 0;
+			for (Edge i : g.G[vertex_in_spotlight]) {
+
+				if (!isMST(MST, i.vertex)) {
+
+					Adjacent[c].key = i.weight;
+					Adjacent[c].vertex = i.vertex;
+					c++;
+
+					for (int y = 0; y < c; y++) {
+						int ind = minHeap.searchHeap(Adjacent[y]);
+						if (ind > -1) {
+							if (Adjacent[y].key < minHeap.Heap[ind].key) {
+								minHeap.Heap[ind].key = Adjacent[y].key;
+							}
+						}
+					}
+
+					minHeap.buildminHeap();
+
+				}
 			}
 
-		}
-		System.out.println(minKey + "z" + tmp.vertex);
-
-		for (int i = 0; i < index; i++) {
-			if (tmp.vertex == MST[i])
-				visited = true;
+			minHeap.buildminHeap();
 		}
 
-		if (visited == false) {
-			MST[index] = tmp.vertex;
-			index++;
-			// System.out.println(MST[index - 1]);
-		}
-
-		minHeap.removeNode(tmp);
-		minHeap.print(); ////////// VERIFIED
-		minKey = Integer.MAX_VALUE;
-
-		int c = 0;
-		for (Edge i : g.G[tmp.vertex]) {
-
-			if (!isMST(MST, i.vertex)) {
-				System.out.println("yay"); ///// VERIFIED
-				Adjacent[c].key = i.weight;
-				Adjacent[c].vertex = i.vertex;
-				System.out.println(Adjacent[c].key + " " + Adjacent[c].vertex);
-				c++;
-			}
-
-		}
-
-		for (int y = 0; y < c; y++) {
-
-			int ind = minHeap.searchHeap(Adjacent[y]); /// opss infinte here
-
-			if (Adjacent[y].key < minHeap.Heap[ind].key) {
-				minHeap.Heap[ind].key = Adjacent[y].key;
-			}
-
-		}
-		minHeap.minHeapify();
-		minHeap.print();
+		System.out.println("Minimum Cost is " + cost);
 	}
 
 	public boolean isMST(int arr[], int vertex) {
