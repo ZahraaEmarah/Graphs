@@ -72,7 +72,12 @@ public class PrimsAlgorithm {
 			minHeap.buildminHeap();
 		}
 
-		System.out.println("Minimum Cost is " + cost);
+		System.out.print("The shortest path is: ");
+		for (int i = 0; i < MST.length; i++) {
+			System.out.print(MST[i] + " ");
+		}
+
+		System.out.println("\n" + "Minimum Cost is " + cost);
 	}
 
 	public boolean isMST(int arr[], int vertex) {

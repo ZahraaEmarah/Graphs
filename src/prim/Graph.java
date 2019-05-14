@@ -5,7 +5,8 @@ import java.util.List;
 
 public class Graph {
 	public class Edge {
-		int vertex, weight;
+		public int vertex;
+		public int weight;
 
 		public Edge(int v, int w) {
 
@@ -20,7 +21,7 @@ public class Graph {
 		}
 	}
 
-	List<Edge> G[];
+	public List<Edge> G[];
 
 	public Graph(int vertexNo) {
 

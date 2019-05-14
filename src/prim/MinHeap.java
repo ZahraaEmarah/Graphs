@@ -2,9 +2,9 @@ package prim;
 
 public class MinHeap {
 
-	static class HeapNode {
-		int vertex;
-		int key;
+	public static class HeapNode {
+		public int vertex;
+		public int key;
 	}
 
 	public Graph g;
