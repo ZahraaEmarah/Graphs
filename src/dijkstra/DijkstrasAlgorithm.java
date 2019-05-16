@@ -2,8 +2,8 @@ package dijkstra;
 
 import implementations.Graph;
 import implementations.Graph.Edge;
-import implementations.MinHeap;
-import implementations.MinHeap.HeapNode;
+import implementations.Heap;
+import implementations.Heap.HeapNode;
 
 public class DijkstrasAlgorithm {
 
@@ -13,7 +13,7 @@ public class DijkstrasAlgorithm {
 		HeapNode Adjacent[] = new HeapNode[verticesNo];
 		HeapNode tmp;
 		int MST[] = new int[verticesNo];
-		MinHeap minHeap = new MinHeap(verticesNo);
+		Heap minHeap = new Heap(verticesNo);
 		int index = 0;
 		int cost = 0;
 		int Dijkstra = 0;
@@ -34,24 +34,21 @@ public class DijkstrasAlgorithm {
 		for (int i = 0; i < verticesNo; i++) {
 			minHeap.insert(heapnode[i]);
 		}
-		minHeap.buildminHeap();
 
 		while (!minHeap.isEmpty()) {
 
 			minHeap.print();
 			System.out.println("");
-			tmp = minHeap.removeRoot();
+			tmp = minHeap.remove();
 			if (tmp == null)
 				break;
 			if (tmp.key == Integer.MAX_VALUE)
 				break;
 
-			System.out.println(tmp.key);
 			Dijkstra = Dijkstra + tmp.key;
 			System.out.println("Di " + Dijkstra);
 			cost = cost + tmp.key;
 			vertex_in_spotlight = tmp.vertex;
-			minHeap.buildminHeap();
 			MST[index++] = vertex_in_spotlight;
 
 			int c = 0;
@@ -67,22 +64,19 @@ public class DijkstrasAlgorithm {
 						int ind = minHeap.searchHeap(Adjacent[y]);
 						if (ind > -1) {
 							if (Adjacent[y].key < minHeap.Heap[ind].key) {
-								minHeap.Heap[ind].key = Adjacent[y].key;
-								minHeap.buildminHeap();
+								minHeap.Heap[ind].key = Dijkstra + Adjacent[y].key;
+								minHeap.minHeapify(ind);
+								minHeap.minHeap();
 							}
 						}
 					}
-
-					minHeap.buildminHeap();
-					minHeap.print();
-					System.out.println("");
-
 				}
-			}
 
-			minHeap.buildminHeap();
-			minHeap.print();
-			System.out.println("");
+				minHeap.minHeapify(1);
+				minHeap.minHeap();
+				minHeap.print();
+				System.out.println("");
+			}
 		}
 
 		System.out.print("The Minimum spanning Tree is : ");
@@ -91,7 +85,7 @@ public class DijkstrasAlgorithm {
 		}
 
 		System.out.println("\n" + "The weight of the graph is   : " + cost);
-		DijkstrasPath(MST, 6);
+		DijkstrasPath(MST, 7);
 	}
 
 	public boolean isMST(int arr[], int vertex) {
@@ -106,17 +100,24 @@ public class DijkstrasAlgorithm {
 		int index = 0;
 		int Notfound = 1;
 
-		for (int i = 0; i < arr.length; i++) {
-			{
-				if (vertex == arr[i]) {
-					index = i;
-					Notfound = 0;
+		if (vertex == arr[0]) {
+			index = 0;
+			Notfound = 0;
+		} else {
+
+			for (int i = 0; i < arr.length; i++) {
+				{
+					if (vertex == arr[i]) {
+						index = i;
+						Notfound = 0;
+					}
 				}
 			}
 		}
 		if (Notfound == 0) {
 			System.out.print("Path of vertex " + vertex + " is: ");
-			for (int i = index; i >= 0; i--) {
+			for (int i = 0; i <= index; i++) {
+
 				System.out.print(arr[i] + " ");
 			}
 		} else {

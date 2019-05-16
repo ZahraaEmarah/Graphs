@@ -7,128 +7,107 @@ public class MinHeap {
 		public int key;
 	}
 
-	public Graph g;
-	public HeapNode[] Heap;
-	public int size;
-	public int maxsize;
+	int capacity;
+	int currentSize;
+	public HeapNode[] mH;
+	int[] indexes; // will be used to decrease the distance
 
-	private static final int ROOT = 0;
-
-	public MinHeap(int maxsize) {
-		this.maxsize = maxsize;
-		this.size = 0;
-		Heap = new HeapNode[this.maxsize + 1];
-		Heap[0] = new HeapNode();
+	public MinHeap(int capacity) {
+		this.capacity = capacity;
+		mH = new HeapNode[capacity + 1];
+		indexes = new int[capacity];
+		mH[0] = new HeapNode();
+		mH[0].key = Integer.MIN_VALUE;
+		mH[0].vertex = -1;
+		currentSize = 0;
 	}
 
-	private int parent(int pos) {
-		return pos / 2;
-	}
-
-	private int leftChild(int pos) {
-		return (2 * pos);
-	}
-
-	private int rightChild(int pos) {
-		return (2 * pos) + 1;
-	}
-
-	private boolean isLeaf(int pos) {
-		if (pos >= (size / 2) && pos <= size) {
-			return true;
+	public void display() {
+		for (int i = 0; i <= currentSize; i++) {
+			System.out.println(" " + mH[i].vertex + "   distance   " + mH[i].key);
 		}
-		return false;
+		System.out.println("________________________");
 	}
 
-	private void swap(int fpos, int spos) {
-		HeapNode tmp;
-		tmp = Heap[fpos];
-		Heap[fpos] = Heap[spos];
-		Heap[spos] = tmp;
+	public void insert(HeapNode x) {
+		currentSize++;
+		int idx = currentSize;
+		mH[idx] = x;
+		indexes[x.vertex] = idx;
+		bubbleUp(idx);
 	}
 
-	private void minHeapify(int pos) {
+	public void bubbleUp(int pos) {
+		int parentIdx = pos / 2;
+		int currentIdx = pos;
+		while (currentIdx > 0 && mH[parentIdx].key > mH[currentIdx].key) {
+			HeapNode currentNode = mH[currentIdx];
+			HeapNode parentNode = mH[parentIdx];
 
-		if (!isLeaf(pos)) {
-			if (Heap[pos].key > Heap[leftChild(pos)].key || Heap[pos].key > Heap[rightChild(pos)].key) {
-
-				System.out.println("Heap[pos].key " + Heap[pos].key);
-				System.out.println("Heap[leftChild(pos)].key " + Heap[leftChild(pos)].key);
-				System.out.println("Heap[rightChild(pos)].key " + Heap[rightChild(pos)].key);
-
-				if (Heap[leftChild(pos)].key < Heap[rightChild(pos)].key) {
-					swap(pos, leftChild(pos));
-					minHeapify(leftChild(pos));
-				}
-
-				else {
-					swap(pos, rightChild(pos));
-					minHeapify(rightChild(pos));
-				}
-			}
+			// swap the positions
+			indexes[currentNode.vertex] = parentIdx;
+			indexes[parentNode.vertex] = currentIdx;
+			swap(currentIdx, parentIdx);
+			currentIdx = parentIdx;
+			parentIdx = parentIdx / 2;
 		}
 	}
 
-	public void insert(HeapNode element) {
-		if (size >= maxsize) {
-			return;
-		}
-
-		Heap[size] = element;
-		int current = size;
-		size++;
-
-		while (Heap[current].key < Heap[parent(current)].key) {
-			swap(current, parent(current));
-			current = parent(current);
-		}
-
+	public HeapNode extractMin() {
+		HeapNode min = mH[1];
+		HeapNode lastNode = mH[currentSize];
+		// update the indexes[] and move the last node to the top
+		indexes[lastNode.vertex] = 1;
+		mH[1] = lastNode;
+		mH[currentSize] = null;
+		sinkDown(1);
+		currentSize--;
+		return min;
 	}
 
-	public void print() {
-		for (int i = 0; i < size; i++) {
-			System.out.print(" Heap is : " + Heap[i].vertex + " " + Heap[i].key);
-			System.out.println();
+	public void sinkDown(int k) {
+		int smallest = k;
+		int leftChildIdx = 2 * k;
+		int rightChildIdx = 2 * k + 1;
+		if (leftChildIdx < heapSize() && mH[smallest].key > mH[leftChildIdx].key) {
+			smallest = leftChildIdx;
+		}
+		if (rightChildIdx < heapSize() && mH[smallest].key > mH[rightChildIdx].key) {
+			smallest = rightChildIdx;
+		}
+		if (smallest != k) {
+
+			HeapNode smallestNode = mH[smallest];
+			HeapNode kNode = mH[k];
+
+			// swap the positions
+			indexes[smallestNode.vertex] = k;
+			indexes[kNode.vertex] = smallest;
+			swap(k, smallest);
+			sinkDown(smallest);
 		}
 	}
 
-	public void buildminHeap() {
-		for (int pos = ((size - 1) / 2) - 1; pos >= 0; pos--) {
-			System.out.println("size " + size + " pos " + pos + " heap of pos " + Heap[pos].key);
-			minHeapify(pos);
-		}
-	}
+	public int searchHeap(int vertex) {
 
-	public int searchHeap(HeapNode n) {
-
-		for (int i = 0; i <= size; i++) {
-			if (n.vertex == Heap[i].vertex)
+		for (int i = 1; i <= currentSize; i++) {
+			if (vertex == mH[i].vertex)
 				return i;
 		}
 		return -1;
 	}
 
+	public void swap(int a, int b) {
+		HeapNode temp = mH[a];
+		mH[a] = mH[b];
+		mH[b] = temp;
+	}
+
 	public boolean isEmpty() {
-
-		for (int i = 0; i < Heap.length; i++) {
-
-			if (Heap[i] != null) {
-				return false;
-			}
-		}
-		return true;
+		return currentSize == 0;
 	}
 
-	public HeapNode removeRoot() {
-
-		if (size == 0)
-			return null;
-
-		HeapNode popped = Heap[ROOT];
-		Heap[ROOT] = Heap[size - 1];
-		size = size - 1;
-		minHeapify(ROOT);
-		return popped;
+	public int heapSize() {
+		return currentSize;
 	}
-
 }

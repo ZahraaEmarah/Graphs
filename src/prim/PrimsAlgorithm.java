@@ -2,8 +2,8 @@ package prim;
 
 import implementations.Graph;
 import implementations.Graph.Edge;
-import implementations.MinHeap;
-import implementations.MinHeap.HeapNode;
+import implementations.Heap;
+import implementations.Heap.HeapNode;
 
 public class PrimsAlgorithm {
 
@@ -13,7 +13,7 @@ public class PrimsAlgorithm {
 		HeapNode Adjacent[] = new HeapNode[verticesNo];
 		HeapNode tmp;
 		int MST[] = new int[verticesNo];
-		MinHeap minHeap = new MinHeap(verticesNo);
+		Heap minHeap = new Heap(verticesNo);
 		int index = 0;
 		int cost = 0;
 
@@ -33,17 +33,17 @@ public class PrimsAlgorithm {
 		for (int i = 0; i < verticesNo; i++) {
 			minHeap.insert(heapnode[i]);
 		}
-		minHeap.buildminHeap();
 
 		while (!minHeap.isEmpty()) {
 
-			tmp = minHeap.removeRoot();
+			tmp = minHeap.remove();
 			if (tmp == null)
+				break;
+			if (tmp.key == Integer.MAX_VALUE)
 				break;
 
 			cost = cost + tmp.key;
 			vertex_in_spotlight = tmp.vertex;
-			minHeap.buildminHeap();
 			MST[index++] = vertex_in_spotlight;
 
 			int c = 0;
@@ -60,18 +60,16 @@ public class PrimsAlgorithm {
 						if (ind > -1) {
 							if (Adjacent[y].key < minHeap.Heap[ind].key) {
 								minHeap.Heap[ind].key = Adjacent[y].key;
+								minHeap.minHeapify(ind);
+								minHeap.minHeap();
 							}
 						}
 					}
-
-					minHeap.buildminHeap();
-					minHeap.print();
-					System.out.println("");
-
 				}
 			}
 
-			minHeap.buildminHeap();
+			minHeap.minHeapify(1);
+			minHeap.minHeap();
 			minHeap.print();
 			System.out.println("");
 		}
