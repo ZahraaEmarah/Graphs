@@ -52,6 +52,10 @@ public class MinHeap {
 		if (!isLeaf(pos)) {
 			if (Heap[pos].key > Heap[leftChild(pos)].key || Heap[pos].key > Heap[rightChild(pos)].key) {
 
+				System.out.println("Heap[pos].key " + Heap[pos].key);
+				System.out.println("Heap[leftChild(pos)].key " + Heap[leftChild(pos)].key);
+				System.out.println("Heap[rightChild(pos)].key " + Heap[rightChild(pos)].key);
+
 				if (Heap[leftChild(pos)].key < Heap[rightChild(pos)].key) {
 					swap(pos, leftChild(pos));
 					minHeapify(leftChild(pos));
@@ -89,7 +93,8 @@ public class MinHeap {
 	}
 
 	public void buildminHeap() {
-		for (int pos = (size / 2); pos >= 0; pos--) {
+		for (int pos = ((size - 1) / 2) - 1; pos >= 0; pos--) {
+			System.out.println("size " + size + " pos " + pos + " heap of pos " + Heap[pos].key);
 			minHeapify(pos);
 		}
 	}

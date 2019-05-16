@@ -68,6 +68,7 @@ public class DijkstrasAlgorithm {
 						if (ind > -1) {
 							if (Adjacent[y].key < minHeap.Heap[ind].key) {
 								minHeap.Heap[ind].key = Adjacent[y].key;
+								minHeap.buildminHeap();
 							}
 						}
 					}

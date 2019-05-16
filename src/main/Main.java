@@ -60,8 +60,8 @@ public class Main {
 		 * 3); g.addEdge(7, 5, 5);
 		 **/
 		System.out.println(dg);
-		// t.Dijkstra(8, dg);
-		// p.Prims(8, g);
-		d.Dijkstra(8, g);
+		t.Dijkstra(8, dg);
+		// p.Prims(8, dg);
+		// d.Dijkstra(8, g);
 	}
 }
