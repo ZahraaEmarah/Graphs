@@ -1,7 +1,9 @@
 package prim;
 
-import prim.Graph.Edge;
-import prim.MinHeap.HeapNode;
+import implementations.Graph;
+import implementations.Graph.Edge;
+import implementations.MinHeap;
+import implementations.MinHeap.HeapNode;
 
 public class PrimsAlgorithm {
 
@@ -11,6 +13,7 @@ public class PrimsAlgorithm {
 		HeapNode Adjacent[] = new HeapNode[verticesNo];
 		HeapNode tmp;
 		int MST[] = new int[verticesNo];
+		MinHeap minHeap = new MinHeap(verticesNo);
 		int index = 0;
 		int cost = 0;
 
@@ -24,10 +27,8 @@ public class PrimsAlgorithm {
 			Adjacent[i].key = Integer.MAX_VALUE;
 		}
 
-		int minKey;
 		int vertex_in_spotlight;
 		heapnode[0].key = 0;
-		MinHeap minHeap = new MinHeap(verticesNo);
 
 		for (int i = 0; i < verticesNo; i++) {
 			minHeap.insert(heapnode[i]);
@@ -41,7 +42,6 @@ public class PrimsAlgorithm {
 				break;
 
 			cost = cost + tmp.key;
-			minKey = tmp.key;
 			vertex_in_spotlight = tmp.vertex;
 			minHeap.buildminHeap();
 			MST[index++] = vertex_in_spotlight;
@@ -65,19 +65,23 @@ public class PrimsAlgorithm {
 					}
 
 					minHeap.buildminHeap();
+					minHeap.print();
+					System.out.println("");
 
 				}
 			}
 
 			minHeap.buildminHeap();
+			minHeap.print();
+			System.out.println("");
 		}
 
-		System.out.print("The shortest path is: ");
+		System.out.print("The Minimum spanning Tree is : ");
 		for (int i = 0; i < MST.length; i++) {
 			System.out.print(MST[i] + " ");
 		}
 
-		System.out.println("\n" + "Minimum Cost is " + cost);
+		System.out.println("\n" + "The weight of the graph is   : " + cost);
 	}
 
 	public boolean isMST(int arr[], int vertex) {

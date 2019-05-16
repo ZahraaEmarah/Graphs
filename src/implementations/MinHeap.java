@@ -1,4 +1,4 @@
-package prim;
+package implementations;
 
 public class MinHeap {
 
@@ -15,13 +15,10 @@ public class MinHeap {
 	private static final int ROOT = 0;
 
 	public MinHeap(int maxsize) {
-
 		this.maxsize = maxsize;
 		this.size = 0;
-		Heap = new HeapNode[this.maxsize];
+		Heap = new HeapNode[this.maxsize + 1];
 		Heap[0] = new HeapNode();
-		Heap[0].vertex = 0;
-		Heap[0].key = Integer.MIN_VALUE;
 	}
 
 	private int parent(int pos) {
@@ -69,7 +66,7 @@ public class MinHeap {
 	}
 
 	public void insert(HeapNode element) {
-		if (size > maxsize) {
+		if (size >= maxsize) {
 			return;
 		}
 
@@ -127,21 +124,6 @@ public class MinHeap {
 		size = size - 1;
 		minHeapify(ROOT);
 		return popped;
-	}
-
-	public HeapNode removeNode(HeapNode n) {
-
-		int index = searchHeap(n);
-		if (index != -1 && index != size - 1) {
-
-			HeapNode popped = Heap[index];
-			Heap[index] = Heap[--size];
-			minHeapify(index);
-			return popped;
-		} else if (index == --size) {
-			size = size - 1;
-		}
-		return null;
 	}
 
 }

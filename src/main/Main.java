@@ -1,13 +1,39 @@
 package main;
 
-import prim.Graph;
+import dijkstra.DijkstrasAlgorithm;
+import implementations.Graph;
+import implementations.trial;
 import prim.PrimsAlgorithm;
 
 public class Main {
 
 	public static void main(String[] args) {
 		Graph g = new Graph(8);
+		Graph dg = new Graph(8);
+		Graph dgg = new Graph(8);
 		PrimsAlgorithm p = new PrimsAlgorithm();
+		DijkstrasAlgorithm d = new DijkstrasAlgorithm();
+		trial t = new trial();
+
+		dg.addEdge(0, 2, 6);
+		dg.addEdge(1, 0, 1);
+		dg.addEdge(1, 3, 6);
+		dg.addEdge(2, 6, 3);
+		dg.addEdge(3, 5, 2);
+		dg.addEdge(4, 2, 4);
+		dg.addEdge(6, 4, 1);
+		dg.addEdge(6, 2, 4);
+		dg.addEdge(6, 5, 8);
+		dg.addEdge(6, 7, 7);
+
+		dgg.addEdge(0, 3, 8);
+		dgg.addEdge(1, 0, 1);
+		dgg.addEdge(2, 4, 5);
+		dgg.addEdge(3, 7, 7);
+		dgg.addEdge(4, 2, 8);
+		dgg.addEdge(5, 3, 1);
+		dgg.addEdge(5, 7, 8);
+		dgg.addEdge(6, 7, 6);
 
 		g.addEdge(0, 1, 8);
 		g.addEdge(0, 4, 2);
@@ -33,7 +59,9 @@ public class Main {
 		 * g.addEdge(6, 1, 3); g.addEdge(6, 2, 1); g.addEdge(6, 5, 7); g.addEdge(7, 4,
 		 * 3); g.addEdge(7, 5, 5);
 		 **/
-		System.out.println(g);
-		p.Prims(8, g);
+		System.out.println(dg);
+		// t.Dijkstra(8, dg);
+		// p.Prims(8, g);
+		d.Dijkstra(8, g);
 	}
 }
