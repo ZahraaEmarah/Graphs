@@ -35,10 +35,10 @@ public class MinHeap {
 		int idx = currentSize;
 		mH[idx] = x;
 		indexes[x.vertex] = idx;
-		bubbleUp(idx);
+		HeapifyUp(idx);
 	}
 
-	public void bubbleUp(int pos) {
+	public void HeapifyUp(int pos) {
 		int parentIdx = pos / 2;
 		int currentIdx = pos;
 		while (currentIdx > 0 && mH[parentIdx].key > mH[currentIdx].key) {
@@ -61,12 +61,12 @@ public class MinHeap {
 		indexes[lastNode.vertex] = 1;
 		mH[1] = lastNode;
 		mH[currentSize] = null;
-		sinkDown(1);
+		HeapifyDown(1);
 		currentSize--;
 		return min;
 	}
 
-	public void sinkDown(int k) {
+	public void HeapifyDown(int k) {
 		int smallest = k;
 		int leftChildIdx = 2 * k;
 		int rightChildIdx = 2 * k + 1;
@@ -85,7 +85,7 @@ public class MinHeap {
 			indexes[smallestNode.vertex] = k;
 			indexes[kNode.vertex] = smallest;
 			swap(k, smallest);
-			sinkDown(smallest);
+			HeapifyDown(smallest);
 		}
 	}
 
