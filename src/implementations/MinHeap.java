@@ -23,7 +23,7 @@ public class MinHeap {
 	}
 
 	public void display() {
-		for (int i = 0; i <= currentSize; i++) {
+		for (int i = 1; i <= currentSize; i++) {
 			System.out.println(" " + mH[i].vertex + "   distance   " + mH[i].key);
 		}
 		System.out.println("________________________");

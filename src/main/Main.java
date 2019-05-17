@@ -3,7 +3,6 @@ package main;
 import dijkstra.DijkstrasAlgorithm;
 import implementations.Graph;
 import prim.PrimsAlgorithm;
-import prim.prim;
 
 public class Main {
 
@@ -13,7 +12,6 @@ public class Main {
 		Graph dgg = new Graph(8);
 		Graph ggd = new Graph(8);
 		PrimsAlgorithm p = new PrimsAlgorithm();
-		prim pr = new prim();
 		DijkstrasAlgorithm d = new DijkstrasAlgorithm();
 
 		dg.addEdge(0, 2, 6);
@@ -53,20 +51,20 @@ public class Main {
 		g.addEdge(6, 7, 9);
 		g.addEdge(7, 6, 9);
 
-		ggd.addEdge(0, 1, 3);
-		ggd.addEdge(0, 2, 6);
-		ggd.addEdge(1, 0, 3);
-		ggd.addEdge(1, 5, 6);
-		ggd.addEdge(2, 0, 6);
-		ggd.addEdge(3, 5, 3);
-		ggd.addEdge(4, 6, 8);
-		ggd.addEdge(4, 7, 1);
-		ggd.addEdge(5, 1, 6);
-		ggd.addEdge(5, 3, 3);
-		ggd.addEdge(5, 7, 9);
-		ggd.addEdge(6, 4, 8);
-		ggd.addEdge(7, 4, 1);
-		ggd.addEdge(7, 5, 9);
+		ggd.addEdge(0, 4, 5);
+		ggd.addEdge(0, 2, 4);
+		ggd.addEdge(1, 6, 5);
+		ggd.addEdge(2, 6, 6);
+		ggd.addEdge(2, 5, 3);
+		ggd.addEdge(2, 0, 4);
+		ggd.addEdge(3, 7, 4);
+		ggd.addEdge(4, 7, 4);
+		ggd.addEdge(4, 0, 5);
+		ggd.addEdge(5, 2, 3);
+		ggd.addEdge(6, 2, 6);
+		ggd.addEdge(6, 1, 5);
+		ggd.addEdge(7, 4, 4);
+		ggd.addEdge(7, 3, 4);
 		/**
 		 * g.addEdge(0, 1, 2); g.addEdge(0, 2, 6); g.addEdge(1, 0, 2); g.addEdge(1, 3,
 		 * 9); g.addEdge(1, 6, 3); g.addEdge(2, 0, 6); g.addEdge(2, 6, 1); g.addEdge(3,
@@ -74,9 +72,9 @@ public class Main {
 		 * g.addEdge(6, 1, 3); g.addEdge(6, 2, 1); g.addEdge(6, 5, 7); g.addEdge(7, 4,
 		 * 3); g.addEdge(7, 5, 5);
 		 **/
-		System.out.println(g);
-		pr.Prims(8, dgg, 0);
-		// p.Prims(8, ggd);
-		// d.Dijkstra(8, dgg);
+		System.out.println(ggd);
+		// pr.Prims(8, dgg, 0);
+		p.Prims(8, 4, ggd);
+		// d.Dijkstra(8, 0, dg);
 	}
 }

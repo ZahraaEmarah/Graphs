@@ -2,20 +2,22 @@ package dijkstra;
 
 import implementations.Graph;
 import implementations.Graph.Edge;
-import implementations.Heap;
-import implementations.Heap.HeapNode;
+import implementations.MinHeap;
+import implementations.MinHeap.HeapNode;
 
 public class DijkstrasAlgorithm {
 
-	public void Dijkstra(int verticesNo, Graph g) {
+	int cost = 0;
+	int MST[];
+
+	public void Dijkstra(int verticesNo, int start, Graph g) {
 
 		HeapNode[] heapnode = new HeapNode[verticesNo];
 		HeapNode Adjacent[] = new HeapNode[verticesNo];
 		HeapNode tmp;
-		int MST[] = new int[verticesNo];
-		Heap minHeap = new Heap(verticesNo);
+		MST = new int[verticesNo];
+		MinHeap minHeap = new MinHeap(verticesNo);
 		int index = 0;
-		int cost = 0;
 		int Dijkstra = 0;
 
 		for (int i = 0; i < verticesNo; i++) {
@@ -29,24 +31,25 @@ public class DijkstrasAlgorithm {
 		}
 
 		int vertex_in_spotlight;
-		heapnode[0].key = 0;
+		heapnode[start].key = 0;
 
 		for (int i = 0; i < verticesNo; i++) {
 			minHeap.insert(heapnode[i]);
 		}
 
+		for (int i = 0; i < MST.length; i++) {
+			MST[i] = Integer.MIN_VALUE;
+		}
+
 		while (!minHeap.isEmpty()) {
 
-			minHeap.print();
-			System.out.println("");
-			tmp = minHeap.remove();
-			if (tmp == null)
-				break;
+			minHeap.display();
+			tmp = minHeap.extractMin();
+
 			if (tmp.key == Integer.MAX_VALUE)
 				break;
 
 			Dijkstra = Dijkstra + tmp.key;
-			System.out.println("Di " + Dijkstra);
 			cost = cost + tmp.key;
 			vertex_in_spotlight = tmp.vertex;
 			MST[index++] = vertex_in_spotlight;
@@ -58,34 +61,33 @@ public class DijkstrasAlgorithm {
 
 					Adjacent[c].key = i.weight;
 					Adjacent[c].vertex = i.vertex;
+					int destination = i.vertex;
 					c++;
-
-					for (int y = 0; y < c; y++) {
-						int ind = minHeap.searchHeap(Adjacent[y]);
-						if (ind > -1) {
-							if (Adjacent[y].key < minHeap.Heap[ind].key) {
-								minHeap.Heap[ind].key = Dijkstra + Adjacent[y].key;
-								minHeap.minHeapify(ind);
-								minHeap.minHeap();
-							}
-						}
-					}
 				}
-
-				minHeap.minHeapify(1);
-				minHeap.minHeap();
-				minHeap.print();
-				System.out.println("");
 			}
+
+			for (int k = 0; k < c; k++) {
+				int ind = minHeap.searchHeap(Adjacent[k].vertex);
+				if (Adjacent[k].key < minHeap.mH[ind].key) {
+					decreaseKey(minHeap, Adjacent[k].key, Adjacent[k].vertex);
+					heapnode[Adjacent[k].vertex].key = Dijkstra + Adjacent[k].key;
+				}
+			}
+
+			for (int k = 0; k < c; k++) {
+				System.out.println(Adjacent[k].vertex + " - " + Adjacent[k].key);
+
+			}
+			System.out.println("");
 		}
 
 		System.out.print("The Minimum spanning Tree is : ");
-		for (int i = 0; i < MST.length; i++) {
+		for (int i = 0; i < index; i++) {
 			System.out.print(MST[i] + " ");
 		}
 
 		System.out.println("\n" + "The weight of the graph is   : " + cost);
-		DijkstrasPath(MST, 7);
+		DijkstrasPath(7);
 	}
 
 	public boolean isMST(int arr[], int vertex) {
@@ -96,18 +98,19 @@ public class DijkstrasAlgorithm {
 		return false;
 	}
 
-	public void DijkstrasPath(int arr[], int vertex) {
+	public String DijkstrasPath(int vertex) {
 		int index = 0;
 		int Notfound = 1;
+		String str = " ";
 
-		if (vertex == arr[0]) {
+		if (vertex == MST[0]) {
 			index = 0;
 			Notfound = 0;
 		} else {
 
-			for (int i = 0; i < arr.length; i++) {
+			for (int i = 0; i < MST.length; i++) {
 				{
-					if (vertex == arr[i]) {
+					if (vertex == MST[i]) {
 						index = i;
 						Notfound = 0;
 					}
@@ -118,12 +121,34 @@ public class DijkstrasAlgorithm {
 			System.out.print("Path of vertex " + vertex + " is: ");
 			for (int i = 0; i <= index; i++) {
 
-				System.out.print(arr[i] + " ");
+				str = str + "  " + MST[i];
+				System.out.print(MST[i] + " ");
 			}
 		} else {
 			System.out.println("No Path !");
+			str = "No Path !";
 		}
 		System.out.println("");
+		return str;
+	}
+
+	public void decreaseKey(MinHeap minHeap, int newKey, int vertex) {
+
+		// get the index which distance's needs a decrease;
+		int index = minHeap.searchHeap(vertex);
+
+		// get the node and update its value
+		HeapNode node = minHeap.mH[index];
+		node.key = newKey;
+		minHeap.bubbleUp(index);
+	}
+
+	public int getweight() {
+		return cost;
+	}
+
+	public int[] getMST() {
+		return MST;
 	}
 
 }
