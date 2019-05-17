@@ -11,12 +11,10 @@ public class MinHeap {
 	int capacity;
 	int currentSize;
 	public HeapNode[] mH;
-	public int[] indexes; // will be used to decrease the distance
 
 	public MinHeap(int capacity) {
 		this.capacity = capacity;
 		mH = new HeapNode[capacity + 1];
-		indexes = new int[capacity];
 		mH[0] = new HeapNode();
 		mH[0].key = Integer.MIN_VALUE;
 		mH[0].vertex = -1;
@@ -33,7 +31,6 @@ public class MinHeap {
 		currentSize++;
 		int idx = currentSize;
 		mH[idx] = x;
-		indexes[x.vertex] = idx;
 		HeapifyUp(idx);
 	}
 
@@ -45,8 +42,6 @@ public class MinHeap {
 			HeapNode parentNode = mH[parentIdx];
 
 			// swap the positions
-			indexes[currentNode.vertex] = parentIdx;
-			indexes[parentNode.vertex] = currentIdx;
 			swap(currentIdx, parentIdx);
 			currentIdx = parentIdx;
 			parentIdx = parentIdx / 2;
@@ -56,8 +51,6 @@ public class MinHeap {
 	public HeapNode extractMin() {
 		HeapNode min = mH[1];
 		HeapNode lastNode = mH[currentSize];
-		// update the indexes[] and move the last node to the top
-		indexes[lastNode.vertex] = 1;
 		mH[1] = lastNode;
 		mH[currentSize] = null;
 		HeapifyDown(1);
@@ -81,8 +74,6 @@ public class MinHeap {
 			HeapNode kNode = mH[k];
 
 			// swap the positions
-			indexes[smallestNode.vertex] = k;
-			indexes[kNode.vertex] = smallest;
 			swap(k, smallest);
 			HeapifyDown(smallest);
 		}
