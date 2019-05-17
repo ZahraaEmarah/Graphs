@@ -7,17 +7,16 @@ import implementations.MinHeap.HeapNode;
 
 public class DijkstrasAlgorithm {
 
-	int cost = 0;
-	int MST[];
+	int distance = 0;
+	HeapNode SHP[];
 
 	public void Dijkstra(int verticesNo, int start, Graph g) {
 
-		HeapNode[] heapnode = new HeapNode[verticesNo];
-		HeapNode Adjacent[] = new HeapNode[verticesNo];
-		HeapNode tmp;
-		MST = new int[verticesNo];
+		HeapNode[] heapnode = new HeapNode[verticesNo]; /// Heapnode for every vertex
+		HeapNode Adjacent[] = new HeapNode[verticesNo]; /// Heapnode for adjacent vertices of a specific vertex
+		HeapNode tmp; /// temporary heapnode for storing the extracted node
+		SHP = new HeapNode[verticesNo]; /// Heapnode for visited vertices
 		MinHeap minHeap = new MinHeap(verticesNo);
-		int index = 0;
 		int Dijkstra = 0;
 
 		for (int i = 0; i < verticesNo; i++) {
@@ -28,127 +27,116 @@ public class DijkstrasAlgorithm {
 			Adjacent[i] = new HeapNode();
 			Adjacent[i].vertex = i;
 			Adjacent[i].key = Integer.MAX_VALUE;
+
+			SHP[i] = new HeapNode();
+			SHP[i].vertex = Integer.MIN_VALUE;
+			SHP[i].key = Integer.MIN_VALUE;
+			SHP[i].source = -1;
 		}
 
 		int vertex_in_spotlight;
 		heapnode[start].key = 0;
+		heapnode[start].source = -1;
 
-		for (int i = 0; i < verticesNo; i++) {
+		for (int i = 0; i < verticesNo; i++) { /// Inserting vertices in the heap
 			minHeap.insert(heapnode[i]);
-		}
-
-		for (int i = 0; i < MST.length; i++) {
-			MST[i] = Integer.MIN_VALUE;
 		}
 
 		while (!minHeap.isEmpty()) {
 
 			minHeap.display();
 			tmp = minHeap.extractMin();
-
 			if (tmp.key == Integer.MAX_VALUE)
 				break;
 
-			Dijkstra = Dijkstra + tmp.key;
-			cost = cost + tmp.key;
+			Dijkstra = tmp.key;
+			System.out.println("Disjkstra " + Dijkstra);
 			vertex_in_spotlight = tmp.vertex;
-			MST[index++] = vertex_in_spotlight;
+
+			/// Mark the extracted node as visited
+			SHP[vertex_in_spotlight].vertex = vertex_in_spotlight;
+			SHP[vertex_in_spotlight].key = Dijkstra;
+			SHP[vertex_in_spotlight].source = tmp.source;
 
 			int c = 0;
 			for (Edge i : g.G[vertex_in_spotlight]) {
-
-				if (!isMST(MST, i.vertex)) {
-
-					Adjacent[c].key = i.weight;
-					Adjacent[c].vertex = i.vertex;
-					int destination = i.vertex;
+				if (!isMST(SHP, i.vertex)) {
+					Adjacent[c].key = i.weight; /// Populating the Adjacent array with all the adjacent vertices to the
+					Adjacent[c].vertex = i.vertex; /// extracted node
 					c++;
 				}
 			}
 
-			for (int k = 0; k < c; k++) {
+			for (int k = 0; k < c; k++) { /// comparing each adjacent vertex key with its old one
 				int ind = minHeap.searchHeap(Adjacent[k].vertex);
-				if (Adjacent[k].key < minHeap.mH[ind].key) {
-					decreaseKey(minHeap, Adjacent[k].key, Adjacent[k].vertex);
-					heapnode[Adjacent[k].vertex].key = Dijkstra + Adjacent[k].key;
+				if (Adjacent[k].key + Dijkstra < minHeap.mH[ind].key) {
+					decreaseKey(minHeap, Adjacent[k].key, Adjacent[k].vertex, Adjacent[k].source); // decrease in heap
+					heapnode[Adjacent[k].vertex].key = Dijkstra + Adjacent[k].key; // update heapnode array
+					heapnode[Adjacent[k].vertex].source = vertex_in_spotlight;
 				}
 			}
 
 			for (int k = 0; k < c; k++) {
-				System.out.println(Adjacent[k].vertex + " - " + Adjacent[k].key);
-
+				System.out.println(Adjacent[k].vertex + " - " + Adjacent[k].key + " - " + Adjacent[k].source);
 			}
 			System.out.println("");
 		}
 
-		System.out.print("The Minimum spanning Tree is : ");
-		for (int i = 0; i < index; i++) {
-			System.out.print(MST[i] + " ");
-		}
+		/// Printing Dijkstra's path for every vertex
+		String str = Integer.toString(start);
+		for (int i = 0; i < verticesNo; i++) {
+			str = ShortestPath(i, 0);
+			if (str.compareTo(Integer.toString(i)) != 0 || str.compareTo(Integer.toString(start)) == 0)
+				System.out.println(str);
+			else {
+				System.out.println("No Path");
+			}
 
-		System.out.println("\n" + "The weight of the graph is   : " + cost);
-		DijkstrasPath(7);
+		}
 	}
 
-	public boolean isMST(int arr[], int vertex) {
+	public boolean isMST(HeapNode arr[], int vertex) {
 		for (int i = 0; i < arr.length; i++) {
-			if (vertex == arr[i])
+			if (vertex == arr[i].vertex)
 				return true;
 		}
 		return false;
 	}
 
-	public String DijkstrasPath(int vertex) {
-		int index = 0;
-		int Notfound = 1;
-		String str = " ";
-
-		if (vertex == MST[0]) {
-			index = 0;
-			Notfound = 0;
+	public String ShortestPath(int vertex, int startvertex) {
+		String path = Integer.toString(vertex); /// initializing the path with the start vertex
+		if (vertex == startvertex) {
+			path = Integer.toString(startvertex);
+			return path;
 		} else {
-
-			for (int i = 0; i < MST.length; i++) {
-				{
-					if (vertex == MST[i]) {
-						index = i;
-						Notfound = 0;
+			for (int i = 0; i < SHP.length; i++) {
+				if (vertex == SHP[i].vertex) {
+					if (SHP[i].source != -1) {
+						path = path + " " + ShortestPath(SHP[i].source, startvertex);
+						distance = SHP[i].key;
 					}
 				}
 			}
+			return path;
 		}
-		if (Notfound == 0) {
-			System.out.print("Path of vertex " + vertex + " is: ");
-			for (int i = 0; i <= index; i++) {
-
-				str = str + "  " + MST[i];
-				System.out.print(MST[i] + " ");
-			}
-		} else {
-			System.out.println("No Path !");
-			str = "No Path !";
-		}
-		System.out.println("");
-		return str;
 	}
 
-	public void decreaseKey(MinHeap minHeap, int newKey, int vertex) {
+	public void decreaseKey(MinHeap minHeap, int newKey, int vertex, int source) {
 
-		// get the index which distance's needs a decrease;
 		int index = minHeap.searchHeap(vertex);
 
-		// get the node and update its value
 		HeapNode node = minHeap.mH[index];
 		node.key = newKey;
+		node.source = source;
 		minHeap.bubbleUp(index);
 	}
 
-	public int getweight() {
-		return cost;
+	public int getdistancet() {
+		return distance;
 	}
 
-	public int[] getMST() {
-		return MST;
+	public HeapNode[] getSHP() {
+		return SHP;
 	}
 
 }

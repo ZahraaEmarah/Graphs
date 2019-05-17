@@ -5,12 +5,13 @@ public class MinHeap {
 	public static class HeapNode {
 		public int vertex;
 		public int key;
+		public int source;
 	}
 
 	int capacity;
 	int currentSize;
 	public HeapNode[] mH;
-	int[] indexes; // will be used to decrease the distance
+	public int[] indexes; // will be used to decrease the distance
 
 	public MinHeap(int capacity) {
 		this.capacity = capacity;

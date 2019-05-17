@@ -11,6 +11,8 @@ public class Main {
 		Graph dg = new Graph(8);
 		Graph dgg = new Graph(8);
 		Graph ggd = new Graph(8);
+		Graph gg = new Graph(8);
+		Graph s = new Graph(8);
 		PrimsAlgorithm p = new PrimsAlgorithm();
 		DijkstrasAlgorithm d = new DijkstrasAlgorithm();
 
@@ -65,6 +67,39 @@ public class Main {
 		ggd.addEdge(6, 1, 5);
 		ggd.addEdge(7, 4, 4);
 		ggd.addEdge(7, 3, 4);
+
+		gg.addEdge(0, 4, 7);
+		gg.addEdge(0, 2, 8);
+		gg.addEdge(1, 3, 4);
+		gg.addEdge(2, 0, 8);
+		gg.addEdge(3, 1, 4);
+		gg.addEdge(3, 5, 1);
+		gg.addEdge(4, 0, 7);
+		gg.addEdge(5, 3, 1);
+		gg.addEdge(5, 6, 8);
+		gg.addEdge(5, 7, 7);
+		gg.addEdge(6, 1, 6);
+		gg.addEdge(6, 5, 8);
+		gg.addEdge(6, 7, 6);
+		gg.addEdge(7, 5, 7);
+		gg.addEdge(7, 6, 6);
+
+		s.addEdge(0, 2, 7);
+		s.addEdge(0, 1, 6);
+		s.addEdge(1, 2, 4);
+		s.addEdge(1, 0, 6);
+		s.addEdge(2, 6, 2);
+		s.addEdge(2, 5, 6);
+		s.addEdge(2, 1, 4);
+		s.addEdge(2, 0, 7);
+		s.addEdge(3, 7, 5);
+		s.addEdge(4, 6, 9);
+		s.addEdge(5, 2, 6);
+		s.addEdge(6, 7, 9);
+		s.addEdge(6, 4, 9);
+		s.addEdge(6, 2, 2);
+		s.addEdge(7, 6, 9);
+		s.addEdge(7, 3, 5);
 		/**
 		 * g.addEdge(0, 1, 2); g.addEdge(0, 2, 6); g.addEdge(1, 0, 2); g.addEdge(1, 3,
 		 * 9); g.addEdge(1, 6, 3); g.addEdge(2, 0, 6); g.addEdge(2, 6, 1); g.addEdge(3,
@@ -72,9 +107,9 @@ public class Main {
 		 * g.addEdge(6, 1, 3); g.addEdge(6, 2, 1); g.addEdge(6, 5, 7); g.addEdge(7, 4,
 		 * 3); g.addEdge(7, 5, 5);
 		 **/
-		System.out.println(ggd);
+		System.out.println(s);
 		// pr.Prims(8, dgg, 0);
-		p.Prims(8, 4, ggd);
-		// d.Dijkstra(8, 0, dg);
+		// p.Prims(8, 4, ggd);
+		d.Dijkstra(8, 0, s);
 	}
 }

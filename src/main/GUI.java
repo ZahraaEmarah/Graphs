@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,9 +14,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import dijkstra.DijkstrasAlgorithm;
 import implementations.Graph;
+import implementations.MinHeap.HeapNode;
 import prim.PrimsAlgorithm;
 
 public class GUI {
@@ -69,6 +72,12 @@ public class GUI {
 		frame.getContentPane().add(main);
 		main.setLayout(null);
 
+		JPanel dijkstrapanel = new JPanel();
+		dijkstrapanel.setBackground(new Color(25, 25, 112));
+		dijkstrapanel.setBounds(0, 0, 378, 326);
+		frame.getContentPane().add(dijkstrapanel);
+		dijkstrapanel.setLayout(null);
+
 		JPanel insertpanel = new JPanel();
 		insertpanel.setBounds(0, 0, 378, 326);
 		frame.getContentPane().add(insertpanel);
@@ -89,11 +98,30 @@ public class GUI {
 		viewpanel.setLayout(null);
 		viewpanel.setVisible(false);
 
-		JPanel dijkstrapanel = new JPanel();
-		dijkstrapanel.setBackground(new Color(25, 25, 112));
-		dijkstrapanel.setBounds(0, 0, 378, 326);
-		frame.getContentPane().add(dijkstrapanel);
-		dijkstrapanel.setLayout(null);
+		JButton button = new JButton("Back");
+		button.setBounds(24, 292, 89, 23);
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				main.setVisible(true);
+				insertpanel.setVisible(false);
+				viewpanel.setVisible(false);
+				primpanel.setVisible(false);
+				dijkstrapanel.setVisible(false);
+			}
+		});
+		button.setBackground(Color.LIGHT_GRAY);
+		dijkstrapanel.add(button);
+
+		JTextArea dijkstratext = new JTextArea();
+		dijkstratext.setBounds(24, 54, 326, 227);
+		dijkstrapanel.add(dijkstratext);
+
+		JLabel lblDijkstrasAlgorithm = new JLabel("Dijkstra's Algorithm");
+		lblDijkstrasAlgorithm.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblDijkstrasAlgorithm.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDijkstrasAlgorithm.setForeground(new Color(255, 255, 224));
+		lblDijkstrasAlgorithm.setBounds(112, 11, 166, 32);
+		dijkstrapanel.add(lblDijkstrasAlgorithm);
 
 		JTextArea textArea = new JTextArea();
 		textArea.setBounds(23, 37, 329, 231);
@@ -118,26 +146,6 @@ public class GUI {
 		weightlabel.setForeground(new Color(255, 255, 224));
 		weightlabel.setBounds(183, 127, 131, 14);
 		primpanel.add(weightlabel);
-
-		JLabel lblShortestPath = new JLabel("Shortest Path :");
-		lblShortestPath.setBounds(24, 67, 149, 14);
-		lblShortestPath.setForeground(new Color(255, 255, 224));
-		dijkstrapanel.add(lblShortestPath);
-
-		JLabel pathlabel = new JLabel("");
-		pathlabel.setBounds(183, 67, 185, 14);
-		pathlabel.setForeground(new Color(255, 255, 224));
-		dijkstrapanel.add(pathlabel);
-
-		JLabel lblDistance = new JLabel("Distance :");
-		lblDistance.setBounds(24, 127, 149, 14);
-		lblDistance.setForeground(new Color(255, 255, 224));
-		dijkstrapanel.add(lblDistance);
-
-		JLabel distancelabel = new JLabel("");
-		distancelabel.setBounds(183, 127, 131, 14);
-		distancelabel.setForeground(new Color(255, 255, 224));
-		dijkstrapanel.add(distancelabel);
 
 		JLabel lblStarting = new JLabel("Start vertex :");
 		lblStarting.setForeground(new Color(255, 255, 224));
@@ -191,12 +199,11 @@ public class GUI {
 				p = new PrimsAlgorithm();
 				p.Prims(Integer.parseInt(vertexno.getText()), Integer.parseInt(startvertex.getText()), g);
 				weightlabel.setText(Integer.toString(p.getweight()));
-				int mst[] = p.getMST();
-				String str = " ";
-				for (int i = 0; i < mst.length; i++) {
-					str = str + "  " + mst[i];
-				}
-				MSTlabel.setText(str);
+				/**
+				 * String mst[] = p.getMST(); String str = " "; for (int i = 0; i < mst.length;
+				 * i++) { str = str + " " + mst[i]; }
+				 **/
+				MSTlabel.setText(p.getMST());
 			}
 		});
 		btnPrim.setBackground(new Color(192, 192, 192));
@@ -211,16 +218,21 @@ public class GUI {
 				viewpanel.setVisible(false);
 				primpanel.setVisible(false);
 				dijkstrapanel.setVisible(true);
+				dijkstratext.setText("");
 
 				d = new DijkstrasAlgorithm();
 				d.Dijkstra(Integer.parseInt(vertexno.getText()), Integer.parseInt(startvertex.getText()), g);
-				distancelabel.setText(Integer.toString(d.getweight()));
-				int mst[] = d.getMST();
-				String str = d.DijkstrasPath(Integer.parseInt(startvertex.getText()));
-				/**
-				 * ; for (int i = 0; i < mst.length; i++) { str = str + " " + mst[i]; }
-				 **/
-				pathlabel.setText(str);
+				HeapNode mst[] = d.getSHP();
+
+				for (int i = 0; i < Integer.parseInt(vertexno.getText()); i++) {
+					String str = d.ShortestPath(i, Integer.parseInt(startvertex.getText()));
+					if (str.compareTo(Integer.toString(i)) != 0 || str.compareTo(startvertex.getText()) == 0)
+						dijkstratext.append(
+								"Path of vertex " + i + " is : " + str + "\t" + "Distance is : " + mst[i].key + "\n");
+					else {
+						dijkstratext.append("Path of vertex " + i + " is : No Path !" + "\n");
+					}
+				}
 			}
 		});
 		btnRunDijkstrasAlgorithm.setBackground(new Color(192, 192, 192));
@@ -315,20 +327,6 @@ public class GUI {
 		JSeparator separator = new JSeparator();
 		separator.setBounds(27, 121, 327, 2);
 		insertpanel.add(separator);
-
-		JButton button = new JButton("Back");
-		button.setBounds(24, 266, 89, 23);
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				main.setVisible(true);
-				insertpanel.setVisible(false);
-				viewpanel.setVisible(false);
-				primpanel.setVisible(false);
-				dijkstrapanel.setVisible(false);
-			}
-		});
-		button.setBackground(Color.LIGHT_GRAY);
-		dijkstrapanel.add(button);
 
 		JButton btnBack_2 = new JButton("Back");
 		btnBack_2.addActionListener(new ActionListener() {
