@@ -98,7 +98,7 @@ public class PrimsAlgorithm {
 
 	public void decreaseKey(MinHeap minHeap, int newKey, int vertex) {
 
-		int index = minHeap.indexes[vertex];
+		int index = minHeap.searchHeap(vertex);
 
 		HeapNode node = minHeap.mH[index];
 		node.key = newKey;

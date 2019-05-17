@@ -25,9 +25,8 @@ public class MinHeap {
 
 	public void display() {
 		for (int i = 1; i <= currentSize; i++) {
-			System.out.println(" " + mH[i].vertex + "   distance   " + mH[i].key);
+			System.out.println(" " + mH[i].vertex + "   weight   " + mH[i].key);
 		}
-		System.out.println("________________________");
 	}
 
 	public void insert(HeapNode x) {
@@ -90,7 +89,6 @@ public class MinHeap {
 	}
 
 	public int searchHeap(int vertex) {
-
 		for (int i = 1; i <= currentSize; i++) {
 			if (vertex == mH[i].vertex)
 				return i;
