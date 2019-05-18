@@ -70,9 +70,12 @@ public class DijkstrasAlgorithm {
 			for (int k = 0; k < c; k++) { /// comparing each adjacent vertex key with its old one
 				int ind = minHeap.searchHeap(Adjacent[k].vertex);
 				if (Adjacent[k].key + Dijkstra < minHeap.mH[ind].key) {
-					decreaseKey(minHeap, Adjacent[k].key, Adjacent[k].vertex, Adjacent[k].source); // decrease in heap
-					heapnode[Adjacent[k].vertex].key = Dijkstra + Adjacent[k].key; // update heapnode array
-					heapnode[Adjacent[k].vertex].source = vertex_in_spotlight;
+					decreaseKey(minHeap, Adjacent[k].key + Dijkstra, Adjacent[k].vertex, vertex_in_spotlight); // decrease
+																												// in
+																												// heap
+					// heapnode[Adjacent[k].vertex].key = Dijkstra + Adjacent[k].key; // update
+					// heapnode array
+					// heapnode[Adjacent[k].vertex].source = vertex_in_spotlight;
 				}
 			}
 

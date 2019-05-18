@@ -71,6 +71,7 @@ public class PrimsAlgorithm {
 			}
 
 			minHeap.HeapifyDown(1);
+
 			for (int k = 0; k < c; k++) {
 				System.out.println(Adjacent[k].vertex + " - " + Adjacent[k].key);
 			}

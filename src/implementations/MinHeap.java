@@ -38,9 +38,6 @@ public class MinHeap {
 		int parentIdx = pos / 2;
 		int currentIdx = pos;
 		while (currentIdx > 0 && mH[parentIdx].key > mH[currentIdx].key) {
-			HeapNode currentNode = mH[currentIdx];
-			HeapNode parentNode = mH[parentIdx];
-
 			// swap the positions
 			swap(currentIdx, parentIdx);
 			currentIdx = parentIdx;
@@ -69,10 +66,6 @@ public class MinHeap {
 			smallest = rightChildIdx;
 		}
 		if (smallest != k) {
-
-			HeapNode smallestNode = mH[smallest];
-			HeapNode kNode = mH[k];
-
 			// swap the positions
 			swap(k, smallest);
 			HeapifyDown(smallest);
